@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+<div id="dashboard">
+    <div>
+        <p>Total de POST: {{total_posts[0] if total_posts else 0}}</p>
+        <p>Total de usuários: {{total_usuarios[0] if total_usuarios else 0 }}</p>
+    </div>
+    <div id="dados">
+
+    </div>
+    <div id="info">
+        <div class="col-info">
+            <h3 style="text-align: center;">USUÁRIOS CADASTRADOS</h3>
+            {% for u in usuarios %}
+            <p style="text-align: left;">{{u.idUsuario}} - {{u.user}} - {{u.nome}}</p>
+            <table>
+                <tr>
+                    <th>Açoes</th>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>User</th>
+                    <th>Data de cadastro</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="/usuario/excluir/{{u.idUsuario}}"></a>
+                    </td>
+                    <td>{{u.idUsuario}}</td>
+                    <td>{{u.nome}}</td>
+                    <td>{{u.user}}</td>
+                    <td><button>
+                            <a href="/usuario/reset/{{u.idUsuario}}">RESETAR SENHA</button></td>
+                    <td>{{u.dataCadastro.strftime("%d/%m/%y")}}</td>
+                    <td>
+                        <a href="/usuario/status/{{u.idUsuario}}">
+                            <button>{{ "Banir" if u.ativo else "Desbanir" }}</button></a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7">Nenhum usuário cadastrado</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="col-info">
+            <h3 style="text-align: center;">POSTAGENS FEITAS</h3>
+            {% for p in post %}
+            <p style="text-align: left;"><a href="/excluirpost/{{p.idPost}}"
+                    onclick="return confirm('confirma a exclsão?')">
+                    <button
+                        style="background-color: transparent; border: none; font-size: 20px;color: red;">⛌</button></a>
+                {{p.idPost}} - {{p.titulo}} - {{p.conteudo | truncate(30) }}</p>
+            {% endfor %}
+        </div>
+        <div id="particles-js"></div>
+
+        <script src="../static/js/particles.js"></script>
+        <script src="../static/js/app.js"></script> 
+    </div>
+
+
+    {% endblock %}

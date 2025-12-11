@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+
+<div id="cadastro">
+    <div class="img-cadastro">
+
+    </div>
+    <form class="form-cadastro" action="/cadastro" method="POST">
+        <h2>Faça seu cadastro no blog</h2>
+
+        <input type="text" name="nome" placeholder="Nome" autocomplete="off" value="" required>
+
+        <input type="text" name="user" placeholder="Usuário" autocomplete="off" value="" required>
+
+        <div class="password-container">
+            <input type="password" name="senha" id="senha" placeholder="Senha" required>
+            <span class="toggle-password" onclick="togglePasswordVisibility(this)">🔒</span>
+        </div>
+
+        <p style="font-size: 15px;"> Ja tem cadastro <a href="/login"
+                style="text-decoration: none;font-size: 15px;">Faça seu login</a></p>
+
+        <button type="submit" class="botao-cadastro">FAZER CADASTRO</button>
+    </form>
+    <div id="particles-js"></div>
+
+    <script src="../static/js/particles.js"></script>
+    <script src="../static/js/app.js"></script>
+    <script src="../static/js/password.js"></script>
+
+</div>
+{%endblock %}

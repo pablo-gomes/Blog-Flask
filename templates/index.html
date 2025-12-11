@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+
+<div class="inicio">
+    <div class="esquerda">
+    </div>
+    <div class="col-centro">
+        {% if "admin" in session or "user" in session %}
+        <div class="conteiner1">
+
+            <img src="/static/uploads/{{session['foto_de_perfil']}}" alt=""
+                style="height: 150px;width: 150px; margin: 20px; border-radius: 50%; object-fit: cover;">
+            <a href="/perfil"><button>VER MEU PERFIL</button></a>
+
+            <div class="form-postagem">
+                <form action="{{'/editar-post/'+ post.idPost|string if post else '/novopost' }}" method="POST"
+                    enctype="multipart/form-data">
+                    <input type="hidden" name="user" value="{{session['user']}}">
+
+                    <input type="text" name="titulo" placeholder="TITULO DA PUBLICAÇÃO"
+                        value="{{post.titulo if post else ''}}" autocomplete="off" required>
+
+                    <textarea name="conteudo" placeholder="COMECE UMA PUBLICAÇÃO"
+                        required>{{post.conteudo if post else ''}}</textarea>
+
+                    <div class="file-upload-container" style="align-self: center;">
+                        <input type="file" name="imagem" id="custom-file-input" accept="image/*,video/*">
+                        <label for="custom-file-input" class="custom-file-label">
+                            Escolher arquivo <img src="../static/img/upload-de-arquivo.png" alt=""
+                                style="width: 15px; height: 15px;margin-left: 10px;">
+                        </label>
+                    </div>
+
+                    <button type="submit" class="botao-postar">{{ 'SALVAR' if post else 'POSTAR'}}</button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+        {% with msg = get_flashed_messages()|first %}
+        {% if msg %}
+        <p style="color: green; font-size: 20px;padding-top: 10px;">{{msg}}</p>
+        {% endif %}
+        {% endwith %}
+
+        <div class="feed">
+            {% if not postagem %}
+            <img src="/static/img/not postagem1.jpg" alt="" style="width: 90%;border-radius: 60px;">
+            {% else %}
+            {% for post in postagem %}
+            <div class="post" style="margin-top: 7px;">
+                <div class="post-header">
+                    <img src="/static/uploads/{{ post.foto if post.foto else 'default.png' }}" alt=""
+                        style="height: 70px;width: 70px; margin: 20px; border-radius: 50%; object-fit: cover;">
+                    <p class="disse" style="font-size: 30px;font-weight: bold;">＠{{ post.user}} </p>
+                </div>
+                <div class="post-subheader">
+                    <p style="padding-top: 8px;font-size: 17px;">Disse :</p>
+                    <p class="data" style="padding-top: 8px;">{{ post.datapost.strftime("%d/%m/%y às %H:%M")}}</p>
+                </div>
+                <div class="post-content">
+                    <h1 style="padding-top: 10px;">{{post.titulo}}</h1>
+                    <p 
+                        style="padding-top: 10px;font-size: 20px;padding-bottom: 10px; border-bottom: 1px solid #D3D3D3;">
+                        {{post.conteudo}}</p>
+
+                    {% if post.imagem and post.tipo_arquivo == 'imagem' %}
+                    <img src="/static/uploads/{{ post.imagem }}"
+                        style="width: 100%; height: auto; border-radius: 10px; margin-top: 10px; margin-bottom: 10px; display: block; margin: 0 auto;margin-top: 40px;margin-bottom: 40px;">
+                    {% endif %}
+
+                    {% if post.video and post.tipo_arquivo == 'video' %}
+                    <video controls
+                        style="width: 100%; height: auto; border-radius: 10px; margin-top: 10px; margin-bottom: 10px; display: block; margin: 0 auto;margin-top: 40px;margin-bottom: 40px;">
+                        <source src="/static/uploads/{{ post.video }}" type="video/mp4">
+                        Seu navegador não suporta o elemento de vídeo.
+                    </video>
+                    {% endif %}
+
+                    {% if post.imagem and not post.tipo_arquivo %}
+                    <img src="/static/uploads/{{ post.imagem }}"
+                        style="width: 100%; height: auto; border-radius: 10px; margin-top: 10px; margin-bottom: 10px; display: block; margin: 0 auto;">
+                    {% endif %}
+                </div>
+
+                {% if 'admin' in session or session.get('idUsuario') == post.idUsuario %}
+                <div class="post-buttons" style="border-top: #D3D3D3 solid 2px; padding-top: 20px;">
+                    {% if 'user' in session %}
+                    <a href="/editar-post/{{ post.idPost }}"><button class="botao-post">Editar <img
+                                src="../static/img/edit.png" alt=""></button></a>
+                    {% endif %}
+                    <a href="/excluir-post/{{ post.idPost }}" onclick="return confirm('Deseja Mesmo Excluir')"><button
+                            class="botao-post">Excluir <img src="../static/img/excluir.png" alt=""></button> </a>
+
+                    <button class="like-btn" data-post-id="{{ post.idPost }}">
+                        🤍 Curtir
+                        <span class="like-count">0</span>
+                    </button>
+                </div>
+                {% endif %}
+
+            </div> {% endfor %} {% endif %}
+            <div class="fim-do-feed">
+                <h1>Voce chegou ao fim do feed</h1>
+                <a href="/">
+                    <p style="font-size: 50px;">⟲</p>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <div class="direita"></div>
+</div>
+<script src="../static/js/script.js"></script>
+<div id="particles-js"></div>
+<script src="../static/js/particles.js"></script>
+<script src="../static/js/app.js"></script>
+
+{% endblock %}

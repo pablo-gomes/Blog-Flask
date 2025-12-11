@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+
+<div class="perfil-container">
+    <div class="foto_perfil">
+        <div class="info">
+            <img src="/static/uploads/{{session['foto_de_perfil'] if session.get('foto_de_perfil') else 'default.png'}}"
+                alt="Foto de Perfil" style="height: 200px; width: 200px; border-radius: 50%; object-fit: cover;">
+            <div
+                style="display: flex; flex-direction: column;  margin-left: 20px;text-align: center;justify-content: center;gap: 20px;">
+                <h2 style="font-size: 30px;">{{ session['nome'] if session.get('nome') else session['user'] }}</h2>
+                <p style="font-size: 25px;">Usuário: {{ session['user'] }}</p>
+            </div>
+        </div>
+        <form action="/atualizar-foto" method="POST" enctype="multipart/form-data"
+            style="margin-top: 20px; text-align: center;">
+            <div style="margin-bottom: 10px; align-self: center;">
+                <input type="file" name="foto" id="custom-file-input" accept="image/*" required style="margin: 10px 0;">
+                <label for="custom-file-input" class="custom-file-label">
+                    Escolher arquivo  <img src="../static/img/upload-de-arquivo.png" alt="" style="width: 15px; height: 15px;margin-left: 10px;">
+                </label>
+            </div>
+            <button type="submit" class="botao-postar">Atualizar Foto</button>
+        </form>
+        <a href="/usuario/novasenha"><button style="width: 500px;margin-top: 20px;">Redefinir Senha</button></a>
+    </div>
+    <div class="info-perfil">
+        <a href="/"><button style="margin-top: 10px;">HOME <img src="../static/img/home.png" alt="" style="margin: 0; margin-left: 10px;width: 19px; height: 19px;"></button></a>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <p style="color: green; font-size: 16px; margin-top: 10px;">{{ messages[0] }}</p>
+        {% endif %}
+        {% endwith %}
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+
+
+<div class="nova-senha">
+    <h2 style="font-size: 2em;">REDEFINIR SENHA</h2>
+    <p style="font-size: 15px;">É obrigatorio</p>
+
+    {% with msg = get_flashed_messages()|first %}
+    {% if msg %}
+    <p style="color: red;">{{msg}}</p>
+    {% endif %}
+    {% endwith %}
+    <div class="form-container">
+        <form action="/usuario/novasenha" method="POST">
+            <input type="password" name="senha" id="senha" placeholder="Nova Senha" required>
+            <labe></label>
+                <input type="password" name="senha" id="senha" placeholder="Confirma a nova senha" required>
+
+                <button type="submit" class="senha_redefinir">Redefinir Senha</button>
+
+
+                <a href="/">
+                    <p style="text-align: center; font-size: 15px;">cancelar</p>
+                </a>
+        </form>
+    </div>
+
+</div>
+<script src="../static/js/script.js"></script>
+<div id="particles-js"></div>
+<script src="../static/js/particles.js"></script>
+<script src="../static/js/app.js"></script>
+<script src="../static/js/password.js"></script>
+{% endblock %}
